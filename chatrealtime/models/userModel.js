@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/chatrealtime');
 var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 
@@ -21,11 +22,13 @@ var UserSchema = new Schema({
     created_at: {
         type: Date,
         required: Date.now
-    },
+    }
 });
 
-UserSchema.method.checkPassword = function (password) {
+UserSchema.methods.checkPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema, 'user');
+
+module.exports = User;

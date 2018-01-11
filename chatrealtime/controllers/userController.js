@@ -1,19 +1,24 @@
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
-var User = mongoose.model('User');
+// var db = require('../models/db');
+var User = require('../models/userModel');
 
+// var User = mongoose.model('User');
 
 exports.register = function(req, res) {
     var newUser = new User(req.body);
-    newUser.password = bcrypt.hashSync(req.body.password, 10);
+
+    var salt = bcrypt.genSaltSync(10);
+    newUser.password = bcrypt.hashSync(req.body.password, salt);
+
     newUser.save(function(err, user) {
         if (err) {
             return res.status(400).send({
                 message: err
             });
         } else {
-            user.password = undefined;
+            user.password = '';
             return res.json(user);
         }
     });
@@ -42,4 +47,8 @@ exports.loginRequired = function(req, res, next) {
     } else {
         return res.status(401).json({ message: 'Unauthorized user!' });
     }
+};
+
+exports.test = function(req, res, next) {
+    res.send('Birds home page');
 };

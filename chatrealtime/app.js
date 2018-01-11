@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/user', users);
 
 http.listen(3000, function () {
   console.log("Listening on http://localhost:3000/");
