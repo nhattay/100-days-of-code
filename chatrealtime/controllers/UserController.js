@@ -24,7 +24,7 @@ exports.register = function(req, res) {
     });
 };
 
-exports.sign_in = function(req, res) {
+exports.signin = function(req, res) {
     User.findOne({
         email: req.body.email
     }, function(err, user) {
@@ -47,8 +47,4 @@ exports.loginRequired = function(req, res, next) {
     } else {
         return res.status(401).json({ message: 'Unauthorized user!' });
     }
-};
-
-exports.test = function(req, res, next) {
-    res.send('Birds home page');
 };

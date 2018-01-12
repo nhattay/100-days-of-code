@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var jsonwebtoken = require('jsonwebtoken');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -35,6 +36,21 @@ app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
+});
+
+app.use(function(req, res, next) {
+  if(req.header && req.header.authorization && req.header.authorization.split(' ')[0] == 'JWT'){
+    jsonwebtoken = jsonwebtoken.verify(req.header.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
+      if(err){
+        req.user = undefined;
+      }
+      req.user = decode;
+      next();
+    });
+  }else {
+    req.user = undefined;
+    next();
+  }
 });
 
 // error handlers
