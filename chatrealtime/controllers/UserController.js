@@ -41,7 +41,11 @@ exports.signin = function(req, res) {
     });
 };
 
-exports.loginRequired = function(req, res, next) {
+exports.profile = function(req, res) {
+    return res.json(req.user);
+};
+
+exports.checkLogin = function(req, res, next) {
     if (req.user) {
         next();
     } else {
