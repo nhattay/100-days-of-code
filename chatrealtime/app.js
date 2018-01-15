@@ -8,6 +8,7 @@ var jsonwebtoken = require('jsonwebtoken');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var convesation = require('./routes/convesation');
 
 var app = express();
 var http = require('http').Server(app);
@@ -20,13 +21,14 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*middleware verify JWT token*/
 app.use(function(req, res, next) {
   if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT'){
+    // console.log(jsonwebtoken);
     jsonwebtoken = jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
       if(err){
         req.user = undefined;
@@ -42,6 +44,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/user', users);
+app.use('/convesation', convesation);
 
 http.listen(3000, function () {
   console.log("Listening on http://localhost:3000/");
