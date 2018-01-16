@@ -5,14 +5,19 @@ var Conversation = require('../models/ConversationModel');
 var Message = require('../models/MessageModel');
 
 exports.createNew = function(req, res, next) {
+    var response = {
+        code: 200,
+        message: '',
+        data: null
+    };
     if(!req.body.recipient) {
-        res.status(422).send({ error: 'Please choose a valid recipient for your message.' });
-        return next();
+        response.message = 'Please choose a valid recipient for your message.';
+        return res.status(422).json(response);
     }
 
     if(!req.body.composedMessage) {
-        res.status(422).send({ error: 'Please enter a message.' });
-        return next();
+        response.message = 'Please enter a message.';
+        return res.status(422).json(response);
     }
 
     const conversation = new Conversation({
@@ -37,8 +42,46 @@ exports.createNew = function(req, res, next) {
                 return next(err);
             }
 
-            res.status(200).json(conversation);
-            return next();
+            response.data = conversation;
+            return res.status(200).json(response);
         });
     });
-}
+};
+
+exports.getConversations = function(req, res, next) {
+    var response = {
+        code: 200,
+        message: '',
+        data: null
+    };
+
+    Conversation.find({ participants: req.user._id })
+        .select('_id')
+        .exec(function(err, conversations) {
+            if (err) {
+                res.send({ error: err });
+                return next(err);
+            }
+
+            var fullConversations = [];
+            conversations.forEach(function(conversation) {
+                Message.findOne({ 'conversationId': conversation._id })
+                    .sort('-createdAt')
+                    .populate({
+                        path: "user",
+                        select: "username email"
+                    })
+                    .exec(function(err, message) {
+                        if (err) {
+                            res.send({ error: err });
+                            return next(err);
+                        }
+                        fullConversations.push(message);
+                        if(fullConversations.length === conversations.length) {
+                            response.data = fullConversations;
+                            return res.status(200).json(response);
+                        }
+                    });
+            });
+        });
+};
