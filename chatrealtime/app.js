@@ -13,6 +13,12 @@ var convesation = require('./routes/convesation');
 var app = express();
 var http = require('http').Server(app);
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -22,13 +28,14 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*middleware verify JWT token*/
 app.use(function(req, res, next) {
   if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT'){
-    console.log(req.headers.authorization);
+
     jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
       if(err){
         req.user = undefined;

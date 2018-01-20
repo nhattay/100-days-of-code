@@ -25,6 +25,7 @@ exports.register = function(req, res) {
 };
 
 exports.signin = function(req, res) {
+    console.log(req.body.email);
     User.findOne({
         email: req.body.email
     }, function(err, user) {
@@ -35,7 +36,11 @@ exports.signin = function(req, res) {
             if (!user.checkPassword(req.body.password)) {
                 res.status(401).json({ message: 'Authentication failed. Wrong password.' });
             } else {
-                return res.json({token: jwt.sign({ email: user.email, username: user.username, _id: user._id}, 'RESTFULAPIs')});
+                return res.json({
+                    token: jwt.sign({ email: user.email, username: user.username, _id: user._id}, 'RESTFULAPIs'),
+                    email: user.email,
+                    username: user.username
+                });
             }
         }
     });
