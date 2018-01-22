@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Http, Headers, Response} from '@angular/http';
 
-import {AuthenticationService} from '../_services/index';
+// import {AuthenticationService} from '../_services/index';
 
 @Component({
   selector: 'app-loginform',
@@ -17,7 +17,7 @@ export class LoginformComponent implements OnInit {
   apiDomain = 'http://localhost:3000';
   token = '';
 
-  constructor(private http:Http, private router: Router) {
+  constructor(private http:Http, private router:Router) {
 
   }
 
@@ -32,11 +32,8 @@ export class LoginformComponent implements OnInit {
       .subscribe(response => {
         this.loading = false;
         response = response.json();
-        localStorage.setItem('currentUser', JSON.stringify({username: response.username, token: response.token}));
+        localStorage.setItem('currentUser', JSON.stringify(response));
         this.router.navigate(['/dashboard']);
-      })
-      .catch(() => {
-        this.loading = false;
       });
   }
 
