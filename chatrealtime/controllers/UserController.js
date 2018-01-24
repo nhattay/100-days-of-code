@@ -39,6 +39,7 @@ exports.signin = function(req, res) {
                 return res.json({
                     token: jwt.sign({ email: user.email, username: user.username, _id: user._id}, 'RESTFULAPIs'),
                     email: user.email,
+                    id: user._id,
                     username: user.username
                 });
             }

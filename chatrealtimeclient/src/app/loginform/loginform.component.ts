@@ -30,11 +30,14 @@ export class LoginformComponent implements OnInit {
     let rs = this.http.post(this.apiDomain + '/user/signin',
       {email: this.model.email, password: this.model.password})
       .subscribe(response => {
-        this.loading = false;
-        response = response.json();
-        localStorage.setItem('currentUser', JSON.stringify(response));
-        this.router.navigate(['/dashboard']);
-      });
+          this.loading = false;
+          response = response.json();
+          localStorage.setItem('currentUser', JSON.stringify(response));
+          this.router.navigate(['/dashboard']);
+        },
+        err => {
+          // this.loading = false;
+        });
   }
 
 }

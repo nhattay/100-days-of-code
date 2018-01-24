@@ -34,12 +34,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*middleware verify JWT token*/
 app.use(function(req, res, next) {
+  console.log(req.headers);
   if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT'){
 
     jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
+      console.log(decode);
       if(err){
         req.user = undefined;
       }
+
       req.user = decode;
       next();
     });
