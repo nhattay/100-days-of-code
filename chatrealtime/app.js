@@ -14,8 +14,9 @@ var app = express();
 var http = require('http').Server(app);
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
   next();
 });
 
@@ -38,7 +39,7 @@ app.use(function(req, res, next) {
   if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT'){
 
     jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
-      console.log(decode);
+
       if(err){
         req.user = undefined;
       }

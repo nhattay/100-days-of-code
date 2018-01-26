@@ -34,9 +34,6 @@ export class LoginformComponent implements OnInit {
           response = response.json();
           localStorage.setItem('currentUser', JSON.stringify(response));
           this.router.navigate(['/dashboard']);
-        },
-        err => {
-          // this.loading = false;
         });
   }
 
