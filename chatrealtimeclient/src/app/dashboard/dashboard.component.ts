@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   model:any = {};
   user;
   apiDomain = 'http://localhost:3000/';
-  convesations = [];
+  conversations = [];
   loading = false;
 
   ngOnInit() {
@@ -28,10 +28,10 @@ export class DashboardComponent implements OnInit {
     // get users from api
     this.http.get(this.apiDomain + 'convesation/list', options)
       .subscribe(response => {
-        // this.loading = false;
+        this.loading = false;
         response = response.json();
-        this.convesations = response.data;
-        console.log(this.convesations);
+        this.conversations = response.data;
+        console.log(this.conversations);
       });
     return;
 

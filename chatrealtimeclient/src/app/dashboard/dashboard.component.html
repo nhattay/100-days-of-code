@@ -31,7 +31,7 @@
     <div id="contacts">
       <ul>
 
-        <app-conversations></app-conversations>
+        <app-conversations *ngFor="let conversation of conversations" [conversation]=conversation></app-conversations>
 
       </ul>
     </div>

@@ -6,7 +6,7 @@ import {Component, OnInit, Input} from '@angular/core';
   styleUrls: ['./conversations.component.css']
 })
 export class ConversationsComponent {
-  @Input() convesation: {
+  @Input() conversation: {
     conversationId: string,
     createdAt: string,
     body: string,
@@ -18,7 +18,7 @@ export class ConversationsComponent {
   constructor() { }
 
   ngOnInit() {
-    // console.log(convesation);
+    console.log(this.conversation);
   }
 
 }
