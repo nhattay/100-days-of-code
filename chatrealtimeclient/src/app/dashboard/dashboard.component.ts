@@ -16,25 +16,48 @@ export class DashboardComponent implements OnInit {
   user;
   apiDomain = 'http://localhost:3000/';
   conversations = [];
-  loading = false;
+  conversation = [];
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
 
-    var headers = new Headers({ 'Authorization': 'JWT ' + this.user.token });
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    this.getConversations();
+  }
+
+  getConversations() {
+
+    var headers = new Headers({'Authorization': 'JWT ' + this.user.token});
     var options = new RequestOptions({headers: headers});
 
 
     // get users from api
     this.http.get(this.apiDomain + 'convesation/list', options)
       .subscribe(response => {
-        this.loading = false;
-        response = response.json();
-        this.conversations = response.data;
-        console.log(this.conversations);
+        var result = response.json();
+        this.conversations = result.data;
+
+        if(this.conversations && this.conversations[0]){
+          let firstConversation = this.conversations[0];
+          this.getConversation(firstConversation.conversationId);
+        }
       });
     return;
+  }
 
+  getConversation(conversationId) {
+    var headers = new Headers({'Authorization': 'JWT ' + this.user.token});
+    var options = new RequestOptions({headers: headers});
+    options.params = {
+      conversationId: conversationId
+    };
+
+    // get users from api
+    this.http.get(this.apiDomain + 'convesation/get', options)
+      .subscribe(response => {
+        var result = response.json();
+        this.conversation = result.data;
+      });
+    return;
   }
 
 }

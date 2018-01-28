@@ -18,7 +18,7 @@ export class ConversationsComponent {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.conversation);
+    // console.log(this.conversation);
   }
 
 }

@@ -86,3 +86,51 @@ exports.getConversations = function (req, res, next) {
       });
     });
 };
+
+exports.getConversation = function (req, res, next) {
+  /*Message.find({ conversationId: req.body.conversationId })
+   .select('createdAt body user')
+   .sort('-createdAt')
+   .populate({
+   path: 'user',
+   select: 'username email'
+   })
+   .exec(function(err, messages) {
+   if (err) {
+   res.send({ error: err });
+   return next(err);
+   }
+
+   res.status(200).json({ conversation: messages });
+   });*/
+
+  var response = {
+    code: 200,
+    message: '',
+    data: null
+  };
+
+  Conversation.findOne({conversationId: req.body.conversationId})
+    .select('_id')
+    .exec(function (err, conversation) {
+      if (err) {
+        res.send({error: err});
+        return next(err);
+      }
+
+      Message.find({'conversationId': conversation._id})
+        .sort('-createdAt')
+        .populate({
+          path: "user",
+          select: "username email"
+        })
+        .exec(function (err, messages) {
+          if (err) {
+            res.send({error: err});
+            return next(err);
+          }
+          response.data = messages;
+          return res.status(200).json(response);
+        });
+    });
+};
