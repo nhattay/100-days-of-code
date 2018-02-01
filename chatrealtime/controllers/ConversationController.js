@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 var Conversation = require('../models/ConversationModel');
 var Message = require('../models/MessageModel');
+var User = require('../models/MessageModel');
 
 exports.createNew = function (req, res, next) {
   var response = {
@@ -110,27 +111,58 @@ exports.getConversation = function (req, res, next) {
     data: null
   };
 
-  Conversation.findOne({conversationId: req.body.conversationId})
-    .select('_id')
-    .exec(function (err, conversation) {
+  /*Message.find({conversationId: req.body.conversationId})
+    // .select('_id')
+    .populate({
+      path: "user",
+      select: "username email"
+    })
+    .exec(function (err, messages) {
       if (err) {
         res.send({error: err});
         return next(err);
       }
+      
+      console.log(messages);
 
-      Message.find({'conversationId': conversation._id})
-        .sort('-createdAt')
-        .populate({
-          path: "user",
-          select: "username email"
-        })
-        .exec(function (err, messages) {
-          if (err) {
-            res.send({error: err});
-            return next(err);
-          }
-          response.data = messages;
-          return res.status(200).json(response);
-        });
+      /!*var fullConversations = [];
+      messages.forEach(function (message) {
+        User.findOne({'conversationId': message._id})
+          .sort('-createdAt')
+          .populate({
+            path: "user",
+            select: "username email"
+          })
+          .exec(function (err, message) {
+            if (err) {
+              res.send({error: err});
+              return next(err);
+            }
+            fullConversations.push(message);
+            if (fullConversations.length === messages.length) {
+              response.data = fullConversations;
+              return res.status(200).json(response);
+            }
+          });
+      });*!/
+    });*/
+
+
+
+  Message.find({conversationId: req.body.conversationId})
+    .sort('-createdAt')
+    /*.populate({
+      path: "user",
+      select: "username email"
+    })*/
+    .exec(function (err, messages) {
+      if (err) {
+        res.send({error: err});
+        return next(err);
+      }
+      response.data = messages;
+      return res.status(200).json(response);
     });
+
+
 };
