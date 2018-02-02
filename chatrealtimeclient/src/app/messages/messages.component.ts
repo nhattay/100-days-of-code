@@ -10,7 +10,7 @@ export class MessagesComponent implements OnInit {
 
   constructor(private http:Http) { }
 
-  @Input() conversation: {
+  @Input() conversationId: {
     conversationId: string,
     createdAt: string,
     body: string,
@@ -22,17 +22,14 @@ export class MessagesComponent implements OnInit {
 
   messages = [];
   user = {};
+  apiDomain = 'http://localhost:3000/';
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
 
-    let conversation = this.conversation;
-    console.log(this.conversation);
-    if(conversation && conversation.conversationId){
-      // this.getConversation(conversation.conversationId);
-    }
+    this.getConversation(this.conversationId);
   }
 
-  /*getConversation(conversationId) {
+  getConversation(conversationId) {
     conversationId = conversationId || null;
 
     if(!conversationId){
@@ -48,9 +45,9 @@ export class MessagesComponent implements OnInit {
     this.http.get(this.apiDomain + 'convesation/get', options)
       .subscribe(response => {
         var result = response.json();
-        this.conversation = result.data;
+        this.messages = result.data;
       });
     return;
-  }*/
+  }
 
 }

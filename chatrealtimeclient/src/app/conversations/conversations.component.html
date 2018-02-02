@@ -4,8 +4,9 @@
     <span class="contact-status online"></span>
     <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
     <div class="meta">
-      <p class="name">{{conversation.user ? conversation.user.username : ''}}</p>
-      <p class="preview">{{conversation.body}}</p>
+      <p class="name" *ngIf="conversation">{{conversation.user ? conversation.user.username : ''}}</p>
+      <p class="preview" *ngIf="conversation">{{conversation.body}}</p>
+      <div class="clearfix"></div>
     </div>
   </div>
 </li>

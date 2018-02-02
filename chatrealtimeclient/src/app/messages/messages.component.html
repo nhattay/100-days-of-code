@@ -1,12 +1,8 @@
 <div class="messages">
   <ul>
-    <li class="sent">
+    <li *ngFor="let message of messages" class="{{message.user._id == user.id ? 'sent' : 'replies'}}" >
       <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-      <p>What are you talking about? You do what they say or they shoot you.</p>
-    </li>
-    <li class="replies">
-      <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-      <p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
+      <p>{{message.body}}</p>
     </li>
   </ul>
 </div>

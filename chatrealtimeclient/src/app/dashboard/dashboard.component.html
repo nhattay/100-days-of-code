@@ -31,7 +31,7 @@
     <div id="contacts">
       <ul>
 
-        <app-conversations *ngFor="let conversation of conversations" [conversation]=conversation></app-conversations>
+        <app-conversations *ngFor="let conversation of conversations" [conversation]="conversation"></app-conversations>
 
       </ul>
     </div>
@@ -52,7 +52,9 @@
       </div>
     </div>
 
-    <app-messages [conversation]=firstConversation></app-messages>
+    <div *ngIf="conversationId">
+      <app-messages [conversationId]=conversationId></app-messages>
+    </div>
 
     <div class="message-input">
       <div class="wrap">

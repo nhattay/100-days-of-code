@@ -55,7 +55,6 @@ exports.getConversations = function (req, res, next) {
     message: '',
     data: null
   };
-  console.log(req.user);
 
   Conversation.find({participants: req.user._id})
     .select('_id')
@@ -89,21 +88,6 @@ exports.getConversations = function (req, res, next) {
 };
 
 exports.getConversation = function (req, res, next) {
-  /*Message.find({ conversationId: req.body.conversationId })
-   .select('createdAt body user')
-   .sort('-createdAt')
-   .populate({
-   path: 'user',
-   select: 'username email'
-   })
-   .exec(function(err, messages) {
-   if (err) {
-   res.send({ error: err });
-   return next(err);
-   }
-
-   res.status(200).json({ conversation: messages });
-   });*/
 
   var response = {
     code: 200,
@@ -111,50 +95,12 @@ exports.getConversation = function (req, res, next) {
     data: null
   };
 
-  /*Message.find({conversationId: req.body.conversationId})
-    // .select('_id')
+  Message.find({conversationId: req.query.conversationId})
+    .sort('-createdAt')
     .populate({
       path: "user",
       select: "username email"
     })
-    .exec(function (err, messages) {
-      if (err) {
-        res.send({error: err});
-        return next(err);
-      }
-      
-      console.log(messages);
-
-      /!*var fullConversations = [];
-      messages.forEach(function (message) {
-        User.findOne({'conversationId': message._id})
-          .sort('-createdAt')
-          .populate({
-            path: "user",
-            select: "username email"
-          })
-          .exec(function (err, message) {
-            if (err) {
-              res.send({error: err});
-              return next(err);
-            }
-            fullConversations.push(message);
-            if (fullConversations.length === messages.length) {
-              response.data = fullConversations;
-              return res.status(200).json(response);
-            }
-          });
-      });*!/
-    });*/
-
-
-
-  Message.find({conversationId: req.body.conversationId})
-    .sort('-createdAt')
-    /*.populate({
-      path: "user",
-      select: "username email"
-    })*/
     .exec(function (err, messages) {
       if (err) {
         res.send({error: err});

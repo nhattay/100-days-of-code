@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   user;
   apiDomain = 'http://localhost:3000/';
   conversations = [];
-  firstConversation = {};
+  conversationId = '5a5e2c49c6b5ff1e64df07c7';
 
   ngOnInit() {
 
@@ -29,17 +29,13 @@ export class DashboardComponent implements OnInit {
     var headers = new Headers({'Authorization': 'JWT ' + this.user.token});
     var options = new RequestOptions({headers: headers});
 
-
     // get users from api
     this.http.get(this.apiDomain + 'convesation/list', options)
       .subscribe(response => {
         var result = response.json();
         this.conversations = result.data;
         if(this.conversations && this.conversations[0]){
-          // let firstConversation = this.conversations[0];
-          this.firstConversation = this.conversations[0];
-          // console.log(this.conversations[0]);
-          // this.getConversation(firstConversation.conversationId);
+          // this.conversationId = this.conversations[0]['conversationId'];
         }
       });
     return;
