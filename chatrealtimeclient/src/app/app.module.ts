@@ -4,6 +4,8 @@ import {FormsModule, ReactiveFormsModule}   from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
 
+import { AuthenticationService } from './_services/index';
+
 import {AppComponent} from './app.component';
 import {LoginformComponent} from './loginform/loginform.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
@@ -33,7 +35,9 @@ const appRoutes:Routes = [
     HttpModule,
     BrowserModule
   ],
-  providers: [],
+  providers: [
+    AuthenticationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Http, Headers, Response} from '@angular/http';
 
-// import {AuthenticationService} from '../_services/index';
+import {AuthenticationService} from '../_services/index';
 
 @Component({
   selector: 'app-loginform',
@@ -17,7 +17,8 @@ export class LoginformComponent implements OnInit {
   apiDomain = 'http://localhost:3000';
   token = '';
 
-  constructor(private http:Http, private router:Router) {
+  constructor(private http:Http, private router:Router,
+              private authenticationService: AuthenticationService) {
 
   }
 
@@ -26,7 +27,18 @@ export class LoginformComponent implements OnInit {
   }
 
   login() {
-    this.loading = true;
+    this.authenticationService.login(this.model.email, this.model.password)
+      .subscribe(response => {
+
+        if (response === true) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.error = 'Username or password is incorrect';
+          this.loading = false;
+        }
+      });
+
+    /*this.loading = true;
     let rs = this.http.post(this.apiDomain + '/user/signin',
       {email: this.model.email, password: this.model.password})
       .subscribe(response => {
@@ -34,7 +46,7 @@ export class LoginformComponent implements OnInit {
           response = response.json();
           localStorage.setItem('currentUser', JSON.stringify(response));
           this.router.navigate(['/dashboard']);
-        });
+        });*/
   }
 
 }
